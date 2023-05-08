@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stores', function (Blueprint $table) {
-            $table->id(); // id BIGINT UNSIGNED AUTO INCREAMENT PRIMARY
-            $table->string('name'); // VARCHAR (255) , we can change default chars like string ('name' , 500)
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('parent_id')->nullable()->constrained('categories' , 'id')->nullOnDelete();
+            $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->string('logo_image')->nullable();
-            $table->string('cover_image')->nullable();
-            $table->enum('status' , ['active','inactive'])->default('active');
+            $table->string('image')->nullable();
+            $table->enum('status', ['active' , 'archived']);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stores');
+        Schema::dropIfExists('categories');
     }
 };
