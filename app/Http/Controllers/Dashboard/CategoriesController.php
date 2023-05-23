@@ -33,11 +33,11 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge(['slug'=>Str::slug($request->post('name'))]);
+        $request->merge(['slug' => Str::slug($request->post('name'))]);
 
 
-        $category = Category::create( $request-> all( ) );
-        return Redirect::route('categories.index')->with('success' , 'Category created!');
+        $category = Category::create($request->all());
+        return Redirect::route('dashboard.categories.index')->with('success', 'Category created!');
     }
 
     /**
@@ -53,7 +53,14 @@ class CategoriesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $parents = Category::where('id', '<>', $id) // category can't be parent of itself
+        ->where(function($query) use($id){
+            $query->whereNull('parent_id') // to include new or null parent value
+            ->orwhere('parent_id', '<>', $id); // two categories can't be parent of themselves
+        }) 
+            ->get();
+        $category = Category::findOrFail($id);
+        return view('dashboard.categories.edit', compact('category', 'parents'));
     }
 
     /**
@@ -61,7 +68,9 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $category = Category::find($id);
+        $category->update($request->all());
+        return Redirect::route('dashboard.categories.index')->with('success', 'Category updated!');
     }
 
     /**
@@ -69,6 +78,9 @@ class CategoriesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return Redirect::route('dashboard.categories.index')->with('success', 'Category deleted!');
+        //or 1 statment Category::destroy($id)
     }
 }

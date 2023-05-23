@@ -5,6 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('dashboard/categories', CategoriesController::class);
+Route::group([
+    'middleware' => 'auth',
+    'as' => 'dashboard.', // before name
+    'prefix' => 'dashboard' // before path
+], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::resource('/categories', CategoriesController::class);
+});
