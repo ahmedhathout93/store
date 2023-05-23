@@ -10,7 +10,7 @@
 
 @section('content')
 
-<form action="{{ route('dashboard.categories.store') }}" method="post">
+<form action="{{ route('dashboard.categories.store') }}" method="post" enctype="multipart/form-data">
 
     @csrf
     <div class="form-group">
@@ -38,13 +38,13 @@
         <label for="">Status</label>
         <div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="status"  value="active" checked>
-                <label class="form-check-label" >
+                <input class="form-check-input" type="radio" name="status" value="active" checked>
+                <label class="form-check-label">
                     Active
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="status"  value="archived">
+                <input class="form-check-input" type="radio" name="status" value="archived">
                 <label class="form-check-label">
                     Archived
                 </label>

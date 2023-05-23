@@ -20,7 +20,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th></th>
+            <th>Image</th>
             <th>ID</th>
             <th>Name</th>
             <th>Parent</th>
@@ -31,7 +31,7 @@
     <tbody>
         @forelse($categories as $category)
         <tr>
-            <td></td>
+            <td><img src="{{asset('storage/'.$category->image)}}" alt="" height="70px"></td>
             <td>{{ $category->id }}</td>
             <td>{{ $category->name }}</td>
             <td>{{ $category->parent_id }}</td>
