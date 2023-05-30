@@ -26,7 +26,8 @@ class CategoriesController extends Controller
     public function create()
     {
         $parents = Category::all(); // return collection object
-        return view('dashboard.categories.create', compact('parents'));
+        $category = new Category();
+        return view('dashboard.categories.create', compact('parents', 'category'));
     }
 
     /**
@@ -34,6 +35,8 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(Category::rules());
+
         $request->merge(['slug' => Str::slug($request->post('name'))]);
         $data = $request->except('image');
         if ($request->hasFile('image')) {
@@ -74,6 +77,8 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate(Category::rules($id));
+
         $category = Category::find($id);
         $old_image = $category->image;
 

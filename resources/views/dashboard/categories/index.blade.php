@@ -12,15 +12,14 @@
 
 <div class="mb-5">
 
-<a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-outline-primary">Create</a>
+    <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-outline-primary">Create</a>
 </div>
-@if(session()->has('success'))
-<div class="alert alert-success">{{session('success')}}</div>
-@endif
-<table class="table">
+<x-form.alert type="success" />
+
+<table class="table text-center ">
     <thead>
         <tr>
-            <th>Image</th>
+            <th >Image</th>
             <th>ID</th>
             <th>Name</th>
             <th>Parent</th>
@@ -31,16 +30,16 @@
     <tbody>
         @forelse($categories as $category)
         <tr>
-            <td><img src="{{asset('storage/'.$category->image)}}" alt="" height="70px"></td>
-            <td>{{ $category->id }}</td>
-            <td>{{ $category->name }}</td>
-            <td>{{ $category->parent_id }}</td>
-            <td>{{ $category->created_at }}</td>
-            <td>
+            <td class="align-middle "><img class="cat-icon" src="{{asset('storage/'.$category->image)}}" alt="" height="70px"></td>
+            <td class="align-middle">{{ $category->id }}</td>
+            <td class="align-middle">{{ $category->name }}</td>
+            <td class="align-middle">{{ $category->parent_id }}</td>
+            <td class="align-middle">{{ $category->created_at }}</td>
+            <td class="align-middle">
                 <a href="{{ route('dashboard.categories.edit' , $category->id ) }}" class="btn btn-sm btn-outline-success">Edit</a>
             </td>
-            <td>
-                <form action="{{ route('dashboard.categories.destroy', $category->id ) }}" method="post" >
+            <td class="align-middle">
+                <form action="{{ route('dashboard.categories.destroy', $category->id ) }}" method="post">
                     @method('DELETE')
                     @csrf
                     <button type=" submit" class="button btn btn-sm btn-outline-danger">Delete</button>
@@ -55,4 +54,3 @@
     </tbody>
 </table>
 @endsection
-
