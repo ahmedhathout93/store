@@ -44,7 +44,7 @@
             <td class="align-middle "><img class="cat-icon" src="{{asset('storage/'.$category->image)}}" alt="" height="70px"></td>
             <td class="align-middle">{{ $category->id }}</td>
             <td class="align-middle">{{ $category->name }}</td>
-            <td class="align-middle">{{ $category->parent_id }}</td>
+            <td class="align-middle">{{ $category->parent_name }}</td>
             <td class="align-middle">{{ $category->status }}</td>
             <td class="align-middle">{{ $category->created_at }}</td>
             <td class="align-middle">
@@ -60,7 +60,7 @@
         </tr>
         @empty
         <tr>
-            <th colspan="6">No categories defined.</th>
+            <th colspan="8">No categories defined.</th>
         </tr>
         @endforelse
     </tbody>

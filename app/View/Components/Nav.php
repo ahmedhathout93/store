@@ -11,7 +11,7 @@ class Nav extends Component
 {
 
     public $items;
-    public $active;
+    // public $active;
     /**
      * Create a new component instance.
      */
@@ -19,7 +19,7 @@ class Nav extends Component
     {
         //
         $this->items = config('nav');
-        $this->active = Route::currentRouteName();
+        // $this->active = Route::currentRouteName();
     }
 
     /**

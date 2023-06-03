@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -10,6 +11,16 @@ class Category extends Model
 {
     use HasFactory;
     protected  $fillable = ['name', 'parent_id', 'description', 'slug', 'image', 'status'];
+
+
+    public function scopeFilter (Builder $builder , $filters){
+        $builder->when($filters['name']??false , function($builder , $value){
+            $builder->where ('categories.name','LIKE' , "%{$value}%");
+        });
+        $builder->when($filters['status']??false , function($builder , $value){
+            $builder->where ('categories.status','=' , $value);
+        });
+    }
 
     public static function rules($id = 0)
     {

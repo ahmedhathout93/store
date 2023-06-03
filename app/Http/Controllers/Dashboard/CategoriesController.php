@@ -18,16 +18,23 @@ class CategoriesController extends Controller
     {
 
         $request = request(); //filter form
-        $query = Category::query(); //database
 
-        if ($name = $request->query('name')) {
-            $query->where('name', 'LIKE', "%{$name}%");
-        }
-        if ($status = $request->query('status')) {
-            $query->where('status', '=', "$status");
-        }
 
-        $categories = $query->paginate(1); // return collection object
+        $categories = Category::leftjoin('categories as parents' , 'parents.id' , '=' , 'categories.parent_id')
+        ->select(
+            'categories.*',
+            'parents.name as parent_name'
+        )->filter($request->query())->paginate(2);
+        // $query = Category::query(); //database
+
+        // if ($name = $request->query('name')) {
+        //     $query->where('name', 'LIKE', "%{$name}%");
+        // }
+        // if ($status = $request->query('status')) {
+        //     $query->where('status', '=', "$status");
+        // }
+        // $categories = Category::Filter($request->query())->paginate(2);
+        // $categories = $query->paginate(2); // return collection object
         return view('dashboard.categories.index', compact('categories'));
     }
 
@@ -37,7 +44,7 @@ class CategoriesController extends Controller
     public function create()
     {
         $parents = Category::all(); // return collection object
-        $category = new Category();
+        $category = new Category(); //
         return view('dashboard.categories.create', compact('parents', 'category'));
     }
 

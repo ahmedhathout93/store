@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Dashboard\CategoriesController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Dashboard\DashboardController;
 
 
 
