@@ -33,7 +33,7 @@
 <div class="form-group">
     <label for="">Status</label>
     <div>
-<x-form.radio name="status" :checked="$category->status" :options="['archived'=>'Archived' ,'active'=>'Active']" />
+        <x-form.radio name="status" :checked="$category->status" :options="['archived'=>'Archived' ,'active'=>'Active']" />
     </div>
 </div>
 <div class="form-group mt-3">

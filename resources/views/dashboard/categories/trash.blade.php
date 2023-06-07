@@ -1,10 +1,11 @@
 @extends('layouts.dashboard')
 
-@section ('title','Categories')
+@section ('title','Trashed Categories')
 
 @section('breadcrumb')
 @parent
 <li class="breadcrumb-item active">Categories</li>
+<li class="breadcrumb-item active">Trash</li>
 
 @endsection
 
@@ -12,8 +13,7 @@
 
 <div class="mb-5">
 
-    <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
-    <a href="{{ route('dashboard.categories.trash') }}" class="btn btn-sm btn-outline-dark">Trash</a>
+    <a href="{{ route('dashboard.categories.index') }}" class="btn btn-sm btn-outline-primary">Back</a>
 </div>
 <x-form.alert type="success" />
 
@@ -33,9 +33,8 @@
             <th >Image</th>
             <th>ID</th>
             <th>Name</th>
-            <th>Parent</th>
             <th>Status</th>
-            <th>Created At</th>
+            <th>Deleted At</th>
             <th colspan="2"></th>
         </tr>
     </thead>
@@ -45,14 +44,17 @@
             <td class="align-middle "><img class="cat-icon" src="{{asset('storage/'.$category->image)}}" alt="" height="70px"></td>
             <td class="align-middle">{{ $category->id }}</td>
             <td class="align-middle">{{ $category->name }}</td>
-            <td class="align-middle">{{ $category->parent_name }}</td>
             <td class="align-middle">{{ $category->status }}</td>
-            <td class="align-middle">{{ $category->created_at }}</td>
+            <td class="align-middle">{{ $category->deleted_at }}</td>
             <td class="align-middle">
-                <a href="{{ route('dashboard.categories.edit' , $category->id ) }}" class="btn btn-sm btn-outline-success">Edit</a>
+                <form action="{{ route('dashboard.categories.restore', $category->id ) }}" method="post">
+                    @method('put')
+                    @csrf
+                    <button type=" submit" class="button btn btn-sm btn-outline-info">Restore</button>
+                </form>
             </td>
             <td class="align-middle">
-                <form action="{{ route('dashboard.categories.destroy', $category->id ) }}" method="post">
+                <form action="{{ route('dashboard.categories.force-delete', $category->id ) }}" method="post">
                     @method('DELETE')
                     @csrf
                     <button type=" submit" class="button btn btn-sm btn-outline-danger">Delete</button>
@@ -61,7 +63,7 @@
         </tr>
         @empty
         <tr>
-            <th colspan="8">No categories defined.</th>
+            <th colspan="8">No trashed categories .</th>
         </tr>
         @endforelse
     </tbody>
