@@ -45,8 +45,8 @@
             <td class="align-middle "><img class="cat-icon" src="{{asset('storage/'.$product->image)}}" alt="" height="70px"></td>
             <td class="align-middle">{{ $product->id }}</td>
             <td class="align-middle">{{ $product->name }}</td>
-            <td class="align-middle">{{ $product->category_id }}</td>
-            <td class="align-middle">{{ $product->store_id }}</td>
+            <td class="align-middle">{{ $product->category->name }}</td>
+            <td class="align-middle">{{ $product->store->name }}</td>
             <td class="align-middle">{{ $product->status }}</td>
             <td class="align-middle">{{ $product->created_at }}</td>
             <td class="align-middle">

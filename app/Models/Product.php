@@ -9,8 +9,34 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-
-    public static function booted(){
-        static::addGlobalScope('store' , new StoreScope());
+    protected $fillable = [
+        'name', 'slug', 'description', 'image', 'category_id', 'store_id',
+        'price', 'compare_price', 'status',
+    ];
+    public static function booted()
+    {
+        static::addGlobalScope('store', new StoreScope());
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,     // Related Model
+            'product_tag',  // Pivot table name
+            'product_id',   // FK in pivot table for the current model
+            'tag_id',       // FK in pivot table for the related model
+            'id',           // PK current model
+            'id'            // PK related model
+        );// we can mention tag class only as we used standard names of laravel but this for explaining
+    }
+
 }

@@ -20,11 +20,17 @@ class CategoriesController extends Controller
         $request = request(); //filter form
 
 
-        $categories = Category::leftjoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
+        $categories = Category::with('parent') /* leftjoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
             ->select(
                 'categories.*',
                 'parents.name as parent_name'
-            )->filter($request->query())->paginate(5);
+            )*/
+            ->withCount([
+                'products as products_number' => function ($query) {
+                    $query->where('status', '=', 'active');
+                }
+            ])
+            ->filter($request->query())->paginate(5);
         // $query = Category::query(); //database
 
         // if ($name = $request->query('name')) {
@@ -70,9 +76,11 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        //
+        return view('dashboard.categories.show' , [
+            'category'=>$category
+        ]);
     }
 
     /**
@@ -137,18 +145,16 @@ class CategoriesController extends Controller
         $category = Category::onlyTrashed()->findOrFail($id);
         $category->restore();
 
-        return redirect()->route('dashboard.categories.trash')->with('success' , 'Category restored !');
-
+        return redirect()->route('dashboard.categories.trash')->with('success', 'Category restored !');
+    }
+    public function forceDelete($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->forceDelete();
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
         }
-        public function forceDelete($id)
-        {
-            $category = Category::onlyTrashed()->findOrFail($id);
-            $category->forceDelete();
-            if ($category->image) {
-                Storage::disk('public')->delete($category->image);
-            }
 
-            return redirect()->route('dashboard.categories.trash')->with('success' , 'Category deleted forever !');
-
-            }
+        return redirect()->route('dashboard.categories.trash')->with('success', 'Category deleted forever !');
+    }
 }

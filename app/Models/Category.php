@@ -10,16 +10,29 @@ use Illuminate\Validation\Rule;
 
 class Category extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
     protected  $fillable = ['name', 'parent_id', 'description', 'slug', 'image', 'status'];
 
+    public function parent()
+    {
+        return $this->belongsTo(Category::class , 'parent_id' , 'id')->withDefault();
+    }
+    public function childern()
+    {
+        return $this->hasMany(Category::class , 'parent_id' , 'id');
+    }
 
-    public function scopeFilter (Builder $builder , $filters){
-        $builder->when($filters['name']??false , function($builder , $value){
-            $builder->where ('categories.name','LIKE' , "%{$value}%");
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id', 'id'); // foreign key and local id for categories
+    }
+    public function scopeFilter(Builder $builder, $filters)
+    {
+        $builder->when($filters['name'] ?? false, function ($builder, $value) {
+            $builder->where('categories.name', 'LIKE', "%{$value}%");
         });
-        $builder->when($filters['status']??false , function($builder , $value){
-            $builder->where ('categories.status','=' , $value);
+        $builder->when($filters['status'] ?? false, function ($builder, $value) {
+            $builder->where('categories.status', '=', $value);
         });
     }
 
