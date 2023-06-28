@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -24,7 +25,11 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        //
+        $category=Category::all();
+        $product=new Product();
+        $tags=new Tag();
+        return view('dashboard.products.create', compact(['product' ,'category', 'tags']));
+
     }
 
     /**

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\Scopes\StoreScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -36,7 +38,33 @@ class Product extends Model
             'tag_id',       // FK in pivot table for the related model
             'id',           // PK current model
             'id'            // PK related model
-        );// we can mention tag class only as we used standard names of laravel but this for explaining
+        ); // we can mention tag class only as we used standard names of laravel but this for explaining
+    }
+    public function scopeActive(Builder $builder)
+    {
+        $builder->where('status', '=', 'active');
+    }
+    // Accessors
+    // $product->image_url
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return 'https://www.incathlab.com/images/products/default_product.png';
+        }
+        if (Str::startsWith($this->image, ['http://', 'https://'])) {
+            return $this->image;
+        }
+        return asset('storage/' . $this->image);
     }
 
+
+    public function getSalePercentAttribute()
+    {
+        if (!$this->compare_price) {
+            return 0;
+        }
+        return round(100 - (100 * $this->price / $this->compare_price), 1);
+    }
+
+    
 }
