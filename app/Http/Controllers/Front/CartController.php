@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Product;
 use App\Repositories\Cart\CartModelRepository;
 use App\Repositories\Cart\CartRepository;
@@ -60,15 +61,13 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request , $id)
     {
         $request->validate([
-            'product_id' => ['required', 'int', 'exists:products,id'],
-            'quantity' => ['nullable', 'int', 'min:1'],
+            'quantity' => ['required', 'int', 'min:1'],
         ]);
 
-        $product = Product::findOrFail($request->post('product_id'));
-        $this->cart->update($product, $request->post('quantity'));
+        $this->cart->update($id, $request->post('quantity'));
     }
 
     /**
@@ -76,6 +75,8 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        $this->cart->delete($id);
+
+        Cart::destroy($id);
+
     }
 }
